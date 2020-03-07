@@ -4,10 +4,15 @@ import java.util.Arrays;
 
 import com.pgm.cursomc.cursomc.domain.Categoria;
 import com.pgm.cursomc.cursomc.domain.Cidade;
+import com.pgm.cursomc.cursomc.domain.Cliente;
+import com.pgm.cursomc.cursomc.domain.Endereco;
 import com.pgm.cursomc.cursomc.domain.Estado;
 import com.pgm.cursomc.cursomc.domain.Produto;
+import com.pgm.cursomc.cursomc.domain.enums.TipoCliente;
 import com.pgm.cursomc.cursomc.repositories.CategoriaRepository;
 import com.pgm.cursomc.cursomc.repositories.CidadeRepository;
+import com.pgm.cursomc.cursomc.repositories.ClienteRepository;
+import com.pgm.cursomc.cursomc.repositories.EnderecoRepository;
 import com.pgm.cursomc.cursomc.repositories.EstadoRepository;
 import com.pgm.cursomc.cursomc.repositories.ProdutoRepository;
 
@@ -30,6 +35,12 @@ public class DemoApplication implements CommandLineRunner {
 
 	@Autowired
 	private CidadeRepository cidRepo;
+
+	@Autowired
+	private ClienteRepository cliRepo;
+
+	@Autowired
+	private EnderecoRepository endRepo;
 
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
@@ -69,6 +80,18 @@ public class DemoApplication implements CommandLineRunner {
 
 		estRepo.saveAll(Arrays.asList(est1, est2, est3));
 		cidRepo.saveAll(Arrays.asList(cid1, cid2, cid3, cid4));
+
+		Cliente cli = new Cliente(null, "Paulo Roberto", "prmorais1302@gmail.com", "39135810491", TipoCliente.PESSOAFISICA);
+		cli.getTelefones().addAll(Arrays.asList("987015547", "32328877"));
+
+		Endereco end1 = new Endereco(null, "Rua Parque Paraúna", "79", "Parque Verde", "Nova Esperança", "59144170", cli,
+				cid1);
+		Endereco end2 = new Endereco(null, "Rua Princesa Isabel,", "799", "PGM", "Cidade Altra", "59025400", cli, cid1);
+
+		cli.getEnderecos().addAll(Arrays.asList(end1, end2));
+
+		cliRepo.save(cli);
+		endRepo.saveAll(Arrays.asList(end1, end2));
 
 	}
 
